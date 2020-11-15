@@ -1,0 +1,8 @@
+version: '2.1'
+services:
+  kinesis:
+    image: saidsef/aws-kinesis-local
+    command: --port 4567
+    restart: always
+    ports:
+      - 4567:4567

@@ -1,0 +1,209 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Stack for Firehose DeliveryStream S3 Destination.
+Resources:
+  deliverystream:
+    DependsOn:
+      - deliveryPolicy
+    Type: AWS::KinesisFirehose::DeliveryStream
+    Properties:
+      DeliveryStreamName: deliverystream
+      ExtendedS3DestinationConfiguration:
+        BucketARN: !Join
+          - ''
+          - - 'arn:aws:s3:::'
+            - !Ref s3bucket
+        BufferingHints:
+          IntervalInSeconds: '60'
+          SizeInMBs: '50'
+        CompressionFormat: UNCOMPRESSED
+        Prefix: firehose/
+        RoleARN: !GetAtt deliveryRole.Arn
+#        ProcessingConfiguration:
+#          Enabled: 'true'
+#          Processors:
+#            - Parameters:
+#                - ParameterName: LambdaArn
+#                  ParameterValue: !GetAtt myLambda.Arn
+#              Type: Lambda
+  s3bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: dakobed-firehose-s3
+      VersioningConfiguration:
+        Status: Enabled
+  deliveryRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: ''
+            Effect: Allow
+            Principal:
+              Service: firehose.amazonaws.com
+            Action: 'sts:AssumeRole'
+            Condition:
+              StringEquals:
+                'sts:ExternalId': !Ref 'AWS::AccountId'
+  deliveryPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: firehose_delivery_policy
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - 's3:AbortMultipartUpload'
+              - 's3:GetBucketLocation'
+              - 's3:GetObject'
+              - 's3:ListBucket'
+              - 's3:ListBucketMultipartUploads'
+              - 's3:PutObject'
+            Resource:
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref s3bucket
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref s3bucket
+                  - '*'
+      Roles:
+        - !Ref deliveryRole
+
+#  myLambda:
+#    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+#    Properties:
+#      CodeUri: hello_world/
+#      Handler: app.lambda_handler
+#      Runtime: python3.7
+#      Events:
+#        HelloWorld:
+#          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+#          Properties:
+#            Path: /hello
+#            Method: get
+
+
+#AWSTemplateFormatVersion: '2010-09-09'
+#Transform: AWS::Serverless-2016-10-31
+#Description: >
+#  process-kinesis
+#
+#  Sample SAM Template for process-kinesis
+#
+## More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+#Globals:
+#  Function:
+#    Timeout: 3
+#
+#Parameters:
+#  BucketName:
+#    Type: String
+#    Default: dakobed-firehose-s3
+#
+#Resources:
+#  s3Bucket:
+#    Type: AWS::S3::Bucket
+#    Properties:
+#      # Need to define a static BucketName due to a circular dependency with the AWS::SNS::TopicPolicy
+#      BucketName: dakobed-firehose-s3
+#      AccessControl: BucketOwnerFullControl
+#      PublicAccessBlockConfiguration:
+#        BlockPublicAcls: true
+#        BlockPublicPolicy: true
+#        IgnorePublicAcls: true
+#        RestrictPublicBuckets: true
+#
+#  deliveryRole:
+#    Type: AWS::IAM::Role
+#    Properties:
+#      AssumeRolePolicyDocument:
+#        Version: 2012-10-17
+#        Statement:
+#          - Sid: ''
+#            Effect: Allow
+#            Principal:
+#              Service: firehose.amazonaws.com
+#            Action: 'sts:AssumeRole'
+#            Condition:
+#              StringEquals:
+#                'sts:ExternalId': !Ref 'AWS::AccountId'
+#  deliveryPolicy:
+#    Type: AWS::IAM::Policy
+#    Properties:
+#      PolicyName: firehose_delivery_policy
+#      PolicyDocument:
+#        Version: 2012-10-17
+#        Statement:
+#          - Effect: Allow
+#            Action:
+#              - 's3:AbortMultipartUpload'
+#              - 's3:GetBucketLocation'
+#              - 's3:GetObject'
+#              - 's3:ListBucket'
+#              - 's3:ListBucketMultipartUploads'
+#              - 's3:PutObject'
+#            Resource:
+#              - !Join
+#                - ''
+#                - - 'arn:aws:s3:::'
+#                  - !Ref s3Bucket
+#              - !Join
+#                - ''
+#                - - 'arn:aws:s3:::'
+#                  - !Ref s3Bucket
+#                  - '*'
+#      Roles:
+#        - !Ref deliveryRole
+#
+#
+#
+##  DeveloperUser:
+##    Type: 'AWS::IAM::User'
+##    Properties:
+##      UserName: user-developer
+##      ManagedPolicyArns:
+##        - 'arn:aws:iam::aws:policy/AWSServiceCatalogEndUserFullAccess'
+##        - 'arn:aws:iam::aws:policy/ReadOnlyAccess'
+##        - 'arn:aws:iam::aws:policy/CloudWatchFullAccess'
+##        - 'arn:aws:iam::aws:policy/AmazonVPCFullAccess'
+##        - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
+##
+##
+#  deliveryStream:
+#    Type: AWS::KinesisFirehose::DeliveryStream
+#    Properties:
+#      DeliveryStreamEncryptionConfigurationInput:
+#        DeliveryStreamEncryptionConfigurationInput
+#      DeliveryStreamName: String
+#      DeliveryStreamType: String
+#        DirectPut
+#      RoleARN: !GetAtt deliveryRole.Arn
+#      S3DestinationConfiguration:
+#        BucketARN:
+#          "Fn::Join": ["",["arn:aws:s3:::", {"Ref": "s3Bucket"},"/*"]]
+#        RoleARN: !GetAtt deliveryRole.Arn
+#
+#
+#
+#
+#
+#
+
+#
+##Outputs:
+##  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
+##  # Find out more about other implicit resources you can reference within SAM
+##  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+##  HelloWorldApi:
+##    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
+##    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
+##  HelloWorldFunction:
+##    Description: "Hello World Lambda Function ARN"
+##    Value: !GetAtt HelloWorldFunction.Arn
+##  HelloWorldFunctionIamRole:
+##    Description: "Implicit IAM Role created for Hello World function"
+##    Value: !GetAtt HelloWorldFunctionRole.Arn
