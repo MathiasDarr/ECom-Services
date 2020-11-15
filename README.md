@@ -1,8 +1,11 @@
-### Dakobed Data Analytics & Engineering ###
+### Data Analytics & Engineering ###
 
 This repository contains demonstrations of data engineering 
 
 ### This repository contains ###
+* Processing with AWS Kinesis Streams, Kinesis Firehose & Lambda
+    - Define resources u
+
 * Demonstration of Hive
     - Hive deployed w/ docker-compose, 
         - Load data into a Hive table & demonstate queries
@@ -12,4 +15,9 @@ This repository contains demonstrations of data engineering
          - Deploy redshift cluster in the VPC    
     - Installed SQL Workbench/J
 
+* Scripts
+    - Wrappers for AWS CLI
 
+* Docker compose files
+    - Hive
+    - AWS local stack
