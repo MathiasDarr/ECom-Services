@@ -21,7 +21,7 @@ get_last_modified = lambda obj: int(obj['LastModified'].strftime('%s'))
 sorted_objects = [obj['Key'] for obj in sorted(objs, key=get_last_modified, reverse=True)]
 archive_file = sorted_objects[0]
 
-local_archive_file = './temp/{}'.format(archive_file)
+local_archive_file = './tmp/{}'.format(archive_file)
 
 ## Download from cloud S3
 with open(local_archive_file, 'wb') as f:
@@ -38,7 +38,7 @@ with open(local_archive_file, "rb") as f:
     s3_local_client.upload_fileobj(f, BUCKET, archive_file)
 
 ## Delete the file from temp
-for f in os.listdir('temp'):
-    os.remove(os.path.join('temp', f))
+for f in os.listdir('tmp'):
+    os.remove(os.path.join('tmp', f))
 
 

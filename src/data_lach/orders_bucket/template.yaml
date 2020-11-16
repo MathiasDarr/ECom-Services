@@ -21,6 +21,15 @@ Resources:
         IgnorePublicAcls: true
         RestrictPublicBuckets: true
 
+Outputs:
+  s3Bucket:
+    Description: "s3 bucket ARN"
+    Value: !GetAtt s3Bucket.Arn
+#  HelloWorldFunctionIamRole:
+#    Description: "Implicit IAM Role created for Hello World function"
+#    Value: !GetAtt HelloWorldFunctionRole.Arn
+
+
 #
 ##  DeveloperUser:
 ##    Type: 'AWS::IAM::User'

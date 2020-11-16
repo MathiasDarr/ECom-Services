@@ -9,6 +9,8 @@ fi
 
 echo ${stackname}
 
+rm -rf package.yaml
+
 sam package \
   --template-file template.yaml \
   --s3-bucket "dakobed-serverless-apis" \
@@ -23,6 +25,9 @@ then
 
 elif [[ $1 == 'local' ]]
 then
+
+  python3 copy_sam_archive.py
+
   aws  --endpoint-url=http://localhost:4566 cloudformation deploy \
       --template-file package.yaml \
       --stack-name ${stackname} \

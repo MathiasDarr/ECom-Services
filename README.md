@@ -4,8 +4,8 @@ This repository contains demonstrations of data engineering
 
 ### This repository contains ###
 * Processing with AWS Kinesis Streams, Kinesis Firehose & Lambda
-    - Define resources u
-
+    * [process kinesis stream with lambda](src/data_lach/process_kinesis_lambda/README.md)
+        - SAM serverless application template deploys kinesis stream, lambda function & necessary roles
 * Demonstration of Hive
     - Hive deployed w/ docker-compose, 
         - Load data into a Hive table & demonstate queries

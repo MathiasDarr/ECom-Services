@@ -12,6 +12,7 @@ Resources:
   HelloWorldFunction:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: KinesisHandlerFunction
       CodeUri: s3://dakobed-serverless-apis/dc87028157212e858c54abb0cf19a3bd
       Handler: app.lambda_handler
       Runtime: python3.7

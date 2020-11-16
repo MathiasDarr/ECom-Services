@@ -1,4 +1,6 @@
 import json
+import base64
+import boto3
 
 # import requests
 
@@ -25,13 +27,19 @@ def lambda_handler(event, context):
         Return doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
     """
 
-    # try:
-    #     ip = requests.get("http://checkip.amazonaws.com/")
-    # except requests.RequestException as e:
-    #     # Send some context about this error to Lambda Logs
-    #     print(e)
+    print("decoded data")
 
-    #     raise e
+    for record in event["Records"]:
+        decoded_data = base64.b64decode(record["kinesis"]["data"]).decode("utf-8")
+        print(decoded_data)
+
+
+
+    # s3 = boto3.resource('s3')
+    # s3object = s3.Object('dakobed-lach-orders', 'your_file.json')
+    # s3object.put(
+    #     Body=(bytes(json.dumps({'data':1}).encode('UTF-8')))
+    # )
 
     return {
         "statusCode": 200,
