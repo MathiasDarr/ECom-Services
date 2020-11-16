@@ -16,3 +16,7 @@ docker-compose -f localstack-compose.yaml up --build
 ### package & build the SAM template to local ###
 * bash deploy.sh local
 
+### Accessing lambda logs from CLI  ###
+
+aws logs describe-log-groups
+

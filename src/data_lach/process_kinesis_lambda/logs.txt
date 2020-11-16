@@ -1,0 +1,34 @@
+{
+    "logStreams": [
+        {
+            "logStreamName": "2020/11/16/[LATEST]9c0173e0",
+            "creationTime": 1605565174325,
+            "firstEventTimestamp": 1605565174295,
+            "lastEventTimestamp": 1605565174324,
+            "lastIngestionTime": 1605565174337,
+            "uploadSequenceToken": "1",
+            "arn": "arn:aws:logs:us-east-1:0:log-group:/aws/lambda/ProcessKinesisFunction:log-stream:2020/11/16/[LATEST]9c0173e0",
+            "storedBytes": 390
+        },
+        {
+            "logStreamName": "2020/11/16/[LATEST]ed4c672b",
+            "creationTime": 1605565177428,
+            "firstEventTimestamp": 1605565177402,
+            "lastEventTimestamp": 1605565177428,
+            "lastIngestionTime": 1605565177442,
+            "uploadSequenceToken": "1",
+            "arn": "arn:aws:logs:us-east-1:000000000000:log-group:/aws/lambda/ProcessKinesisFunction:log-stream:2020/11/16/[LATEST]ed4c672b",
+            "storedBytes": 391
+        },
+        {
+            "logStreamName": "2020/11/16/[LATEST]50419287",
+            "creationTime": 1605565234987,
+            "firstEventTimestamp": 1605565234931,
+            "lastEventTimestamp": 1605565234985,
+            "lastIngestionTime": 1605565235003,
+            "uploadSequenceToken": "1",
+            "arn": "arn:aws:logs:us-east-1:2:log-group:/aws/lambda/ProcessKinesisFunction:log-stream:2020/11/16/[LATEST]50419287",
+            "storedBytes": 389
+        }
+    ]
+}
