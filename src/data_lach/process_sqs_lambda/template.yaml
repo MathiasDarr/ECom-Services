@@ -1,0 +1,43 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+#  LambdaFunction:
+#    Type: AWS::Serverless::Function
+#    Properties:
+#      CodeUri: process_sqs_lambda_function/
+#      Handler: app.lambda_handler
+#      Runtime: python3.7
+#      Timeout: 10
+#      Tracing: Active
+#      FunctionName: ProcessTransformFunction
+#      Policies:
+#        - S3FullAccessPolicy:
+#            BucketName: dakobed-lach-orders
+#
+#      Events:
+#        SQSEvent:
+#          Type: SQS
+#          Properties:
+#            Queue: !GetAtt TransformQueue.Arn
+#            BatchSize: 10
+#            Enabled: false
+
+  TransformQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: TransformQueue
+
+Outputs:
+#  FunctionName:
+#    Description: "Function name"
+#    Value: !Ref LambdaFunction
+  QueueURL:
+    Description: "Queue URL"
+    Value: !Ref TransformQueue
+
+
+
+
+
+

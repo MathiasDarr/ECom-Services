@@ -1,5 +1,9 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
+
+
+
+
 Resources:
   LambdaFunction:
     Type: AWS::Serverless::Function
@@ -10,14 +14,21 @@ Resources:
       Timeout: 10
       Tracing: Active
       FunctionName: ProcessKinesisFunction
+      Environment:
+          Variables:
+            deployment: localstack
+      Policies:
+        - S3FullAccessPolicy:
+            BucketName: dakobed-lach-orders
+
       Events:
         Stream:
           Type: Kinesis
           Properties:
-
             Stream: !GetAtt OrdersStream.Arn
             BatchSize: 100
             StartingPosition: LATEST
+
   OrdersStream:
     Type: AWS::Kinesis::Stream
     Properties:

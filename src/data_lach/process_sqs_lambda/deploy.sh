@@ -2,12 +2,10 @@
 
 if [[ -z $2 ]]
 then
-  stackname=kinesis-lambda-stack
+  stackname=sqs-lambda-stack
 else
   stackname=$2
 fi
-
-echo ${stackname}
 
 rm -rf package.yaml
 

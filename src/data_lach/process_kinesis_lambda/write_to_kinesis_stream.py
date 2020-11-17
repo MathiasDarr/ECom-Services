@@ -12,6 +12,7 @@ import json
 import time
 import sys
 
+
 def put_kinesis_records(kinesis_client):
     """
     This function writes several records to a kinesis stream
@@ -43,8 +44,9 @@ def put_kinesis_records(kinesis_client):
         PartitionKey=str(2))
     print(put_response2)
 
+
 if __name__ =='__main__':
-    kinesis_client = boto3.client('kinesis', endpoint_url='http://localhost:4566') if str(sys.argv[1]) == 'local' \
+    kinesis_client = boto3.client('kinesis', endpoint_url='http://localhost:4566', region_name='us-west-2') if str(sys.argv[1]) == 'local' \
         else boto3.client('kinesis', region_name='us-west-2')
 
     put_kinesis_records(kinesis_client)

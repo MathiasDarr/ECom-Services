@@ -4,12 +4,18 @@ Resources:
   LambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://dakobed-serverless-apis/0e4d321edf6b9ffe8afc0cd4f4a8ef63
+      CodeUri: s3://dakobed-serverless-apis/1099c1880a67870d08d1159fa824e907
       Handler: app.lambda_handler
       Runtime: python3.7
       Timeout: 10
       Tracing: Active
       FunctionName: ProcessKinesisFunction
+      Environment:
+        Variables:
+          deployment: localstack
+      Policies:
+      - S3FullAccessPolicy:
+          BucketName: dakobed-lach-orders
       Events:
         Stream:
           Type: Kinesis

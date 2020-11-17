@@ -1,0 +1,12 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  TransformQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: TransformQueue
+Outputs:
+  QueueURL:
+    Description: Queue URL
+    Value:
+      Ref: TransformQueue
