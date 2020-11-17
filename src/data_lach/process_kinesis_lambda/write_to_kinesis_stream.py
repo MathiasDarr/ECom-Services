@@ -23,26 +23,15 @@ def put_kinesis_records(kinesis_client):
     payload = {
         'prop': str(5),
         'timestamp': str(time.time()),
-        'thing_id': 1
-    }
-
-    payload2 = {
-        'prop': str(2),
-        'timestamp': str(time.time()),
-        'thing_id': 232
+        'thing_id': 15
     }
 
     put_response = kinesis_client.put_record(
         StreamName=stream_name,
         Data=json.dumps(payload),
         PartitionKey=str(5))
-    print(put_response)
 
-    put_response2 = kinesis_client.put_record(
-        StreamName=stream_name,
-        Data=json.dumps(payload2),
-        PartitionKey=str(2))
-    print(put_response2)
+    print(put_response)
 
 
 if __name__ =='__main__':

@@ -4,10 +4,12 @@ import boto3
 import os
 # import requests
 
-HOST = "http://71.212.158.210"
+HOST = os.getenv('LOCALSTACK_HOSTNAME')
+print("HOST")
+print(HOST)
 # Get the service resource
 # To production it's not necessary inform the "endpoint_url" and "region_name"
-s3 = boto3.resource('s3', endpoint_url= HOST + ":4566", region_name="us-west-2")
+s3 = boto3.resource('s3', endpoint_url= 'http://{}:4566'.format(HOST))
 
 
 
