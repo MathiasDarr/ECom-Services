@@ -16,7 +16,10 @@ docker-compose -f localstack-compose.yaml up --build
 ### package & build the SAM template to local ###
 * bash deploy.sh local
 
-### Accessing lambda logs from CLI  ###
 
-aws logs describe-log-groups
+### Write to kinesis stream using boto3, triggering lambda function ###
+* python3 write_to_kinesis_stream.py 
+
+### Accessing lambda logs from CLI  ###
+* bash scripts/get_most_recent_logstream.sh local 
 
