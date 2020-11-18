@@ -1,0 +1,61 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+  ProcessKinesisDynamoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: process_orders_lambda_dynamo/
+      Handler: app.lambda_handler
+      Runtime: python3.7
+      Timeout: 10
+      Tracing: Active
+      FunctionName: ProcessKinesisDynamoFunction
+      Environment:
+          Variables:
+            deployment: localstack
+      Policies:
+        - S3FullAccessPolicy:
+            BucketName: dakobed-lach-orders
+      Events:
+        Stream:
+          Type: Kinesis
+          Properties:
+            Stream: !GetAtt OrdersStream.Arn
+            BatchSize: 100
+            StartingPosition: LATEST
+
+  OrdersStream:
+    Type: AWS::Kinesis::Stream
+    Properties:
+      Name: OrdersStream
+      ShardCount: 1
+
+  OrdersTable:
+    Type: 'AWS::DynamoDB::Table'
+    Properties:
+      TableName: Orders
+      AttributeDefinitions:
+        - AttributeName: CustomerID
+          AttributeType: S
+        - AttributeName: OrderID
+          AttributeType: S
+      KeySchema:
+        - AttributeName: CustomerID
+          KeyType: HASH
+        - AttributeName: OrderID
+          KeyType: RANGE
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+
+
+
+
+Outputs:
+  FunctionName:
+    Description: "Function name"
+    Value: !Ref LambdaFunction
+  StreamARN:
+    Description: "Stream ARN"
+    Value: !GetAtt OrdersStream.Arn

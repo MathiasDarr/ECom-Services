@@ -1,0 +1,20 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: This tempalte defines a products table
+Resources:
+  ProductsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: Products
+      AttributeDefinitions:
+      - AttributeName: Brand
+        AttributeType: S
+      - AttributeName: ProductName
+        AttributeType: S
+      KeySchema:
+      - AttributeName: Brand
+        KeyType: HASH
+      - AttributeName: ProductName
+        KeyType: RANGE
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1

@@ -1,0 +1,37 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: This template defines the Orders data model
+Resources:
+  OrdersTable:
+    Type: 'AWS::DynamoDB::Table'
+    Properties:
+      TableName: Orders
+      AttributeDefinitions:
+        - AttributeName: orderID
+          AttributeType: S
+        - AttributeName: orderCreationDate
+          AttributeType: N
+        - AttributeName: customerID
+          AttributeType: S
+
+      KeySchema:
+        - AttributeName: orderID
+          KeyType: HASH
+        - AttributeName: orderCreationDate
+          KeyType: RANGE
+
+      GlobalSecondaryIndexes:
+        -
+          IndexName: CustomerIndex
+          KeySchema:
+            -
+              AttributeName: customerID
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
+
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1

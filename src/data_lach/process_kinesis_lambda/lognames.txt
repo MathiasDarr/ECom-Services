@@ -1,3 +1,0 @@
-            "logStreamName": "2020/11/16/[LATEST]9c0173e0",
-            "logStreamName": "2020/11/16/[LATEST]ed4c672b",
-            "logStreamName": "2020/11/16/[LATEST]50419287",

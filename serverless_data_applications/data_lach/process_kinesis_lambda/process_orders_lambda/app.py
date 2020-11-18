@@ -11,7 +11,6 @@ s3 = boto3.resource('s3') if os.getenv('deployment') != 'localstack' else \
 def write_data_to_s3(data):
     try:
         s3object = s3.Object('dakobed-lach-orders', 'first_data.json')
-
         for record in data:
             s3object.put(
                 Body=(bytes(json.dumps(record).encode('UTF-8')))
