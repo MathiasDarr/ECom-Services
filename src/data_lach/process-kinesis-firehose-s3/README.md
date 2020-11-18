@@ -8,3 +8,6 @@ The Cloud formation tempalate deploys a stack with the following resources
 
 
 CAPABILITY_NAMED_IAM vs CAPABILITY_IAM
+
+s3 = boto3.resource('s3') if os.getenv('deployment') != 'localstack' else \
+    boto3.resource('s3', endpoint_url= 'http://{}:4566'.format(os.getenv('LOCALSTACK_HOSTNAME')))
