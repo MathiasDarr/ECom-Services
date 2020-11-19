@@ -1,0 +1,34 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: This tempalte defines a products table
+Resources:
+  ProductsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: Products
+      AttributeDefinitions:
+      - AttributeName: vendor
+        AttributeType: S
+      - AttributeName: productName
+        AttributeType: S
+      - AttributeName: category
+        AttributeType: S
+      KeySchema:
+      - AttributeName: vendor
+        KeyType: HASH
+      - AttributeName: productName
+        KeyType: RANGE
+      GlobalSecondaryIndexes:
+      - IndexName: GSI
+        KeySchema:
+        - AttributeName: category
+          KeyType: HASH
+        - AttributeName: productName
+          KeyType: RANGE
+        Projection:
+          ProjectionType: ALL
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1

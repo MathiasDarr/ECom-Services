@@ -25,7 +25,7 @@ then
 elif [[ $1 == 'local' ]]
 then
   aws --endpoint-url=http://localhost:4566 s3 mb s3://dakobed-lach-orders
-  python3 ../../copy_sam_archive.py
+  python3 ../copy_sam_archive.py
 
   aws  --endpoint-url=http://localhost:4566 cloudformation deploy \
       --template-file package.yaml \
