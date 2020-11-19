@@ -1,11 +1,8 @@
 """
-This script scrapes REI.com for products & inserts
-
-
+This script scrapes REI.com for products & writes csv files for each category i.e mens-boots
 """
 # !/usr/bin/env python3
 
-import boto3
 import requests
 from bs4 import BeautifulSoup
 import re
@@ -13,6 +10,12 @@ import csv
 
 
 def get_product_detail(url, category):
+    """
+    This function scrapes product detail information information of an individual product
+    :param url: product url
+    :param category: cateogry of product
+    :return: product dictionary with product name, vendor, colors, price & category
+    """
     page = requests.get(url)
     soup = BeautifulSoup(page.text, 'html.parser')
 
@@ -99,40 +102,17 @@ def get_products(category):
             products.add(a['href'])
             # print("Found the URL:", a['href'])
         pagenumber += 1
-
     return ['https://www.rei.com' + str(product) for product in products if str(product).find('rei-garage') < 0]
 
 
-def insert_product(product):
-    """
-    Insert a product into dynamodb.
-    :param product: Product dictionary
-    :return:
-    """
-    return table.put_item(
-        Item={
-            'vendor': product['name'],
-            'productName': product['name'],
-            'colors': product['colors'],
-            'price': product['price']
-        }
-    )
-
-
-dynamodb = boto3.resource('dynamodb', endpoint_url="http://localhost:4566")
-table = dynamodb.Table('Products')
-
 categories = ['mens-casual-jackets', 'mens-boots', 'mens-insulated-jackets', 'mens-fleece-and-soft-shell-jackets',
-              'mens-rain-jackets',
-              'mens-running-jackets', 'mens-wind-shells', 'mens-snow-jackets', 'mens-winter-boots',
+              'mens-rain-jackets', 'mens-running-jackets', 'mens-snow-jackets', 'mens-winter-boots',
               'backpacking-packs', 'day-packs', 'womens-boots', 'womens-casual-jackets', 'womens-insulated-jackets',
               'womens-fleece-and-soft-shell-jackets', 'womens-rain-jackets', 'womens-running-jackets']
+# This category wasn't working
 windshells = 'mens-wind-shells'
-categories  = ['mens-snow-jackets', 'mens-winter-boots',
-              'backpacking-packs', 'day-packs', 'womens-boots', 'womens-casual-jackets', 'womens-insulated-jackets',
-              'womens-fleece-and-soft-shell-jackets', 'womens-rain-jackets', 'womens-running-jackets']
-products = get_products(categories[0])
 
+products = get_products(categories[0])
 all_products = []
 
 for category in categories:
@@ -144,9 +124,8 @@ for category in categories:
             parsed_products.append(get_product_detail(product_url, category))
         except Exception as e:
             print(e)
-    keys = ['name', 'vendor', 'colors','price', 'url', 'category']
+    keys = ['name', 'vendor', 'colors', 'price', 'url', 'category']
     with open('data_model/rei_product_scraping/data/{}.csv'.format(category), 'w', newline='') as output_file:
         dict_writer = csv.DictWriter(output_file, keys)
         dict_writer.writeheader()
         dict_writer.writerows(parsed_products)
-
