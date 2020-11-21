@@ -1,0 +1,5 @@
+customerId,prices,order_time,order_status,orderID,products,quantities,brands
+jerry@gmail.com,"185.00,200.21",20150120,SHIPPING,20160630-28176,"Terra 65,Ariel AG 55","1,1","North Face,Osprey"
+jerry@gmail.com,"185.00,200.21",20150130,SHIPPING,20170609-25875,"Terra 65,Ariel AG 55","1,1","North Face,Osprey"
+alice@gmail.com,"185.00,200.21",20150135,PROCESSING,20171129-29970,"Terra 65,Ariel AG 55","1,1","North Face,Osprey"
+billy@gmail.com,"185.00,200.21",20150134,PROCESSING,20170608-10171,"Terra 65,Ariel AG 55","1,1","North Face,Osprey"
