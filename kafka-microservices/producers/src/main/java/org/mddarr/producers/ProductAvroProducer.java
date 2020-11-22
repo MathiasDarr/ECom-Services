@@ -1,5 +1,6 @@
 package org.mddarr.producers;
 
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
@@ -25,32 +26,42 @@ import java.util.*;
 
 public class ProductAvroProducer {
 
-    static AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().build();
-    static DynamoDB dynamoDB = new DynamoDB(client);
+//    static AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().build();
+//    static DynamoDB dynamoDB = new DynamoDB(client);
     static String tableName = "Products";
 
     public static void main(String[] args) {
-        populateProductsKafkaTopic();
-    }
+        DefaultKafkaProducerFactory<String, AvroProduct> pf1 = getKafkaProducerFactory();
+        KafkaTemplate<String, AvroProduct> template1 = new KafkaTemplate<>(pf1, true);
+        template1.setDefaultTopic("Products-Kafka-Topic");
 
-
-    private static void scanProductsTable() {
-
+        AmazonDynamoDB amazonDynamoDB = amazonDynamoDB();
+        DynamoDB dynamoDB = new DynamoDB(amazonDynamoDB);
         Table table = dynamoDB.getTable(tableName);
-
-//        Map<String, Object> expressionAttributeValues = new HashMap<String, Object>();
-//        expressionAttributeValues.put(":pr", 100);
-
-        ItemCollection<ScanOutcome> items = table.scan(); //"price < 200", // FilterExpression
-//                "Id, Title, ProductCategory, Price", // ProjectionExpression
-//                null, // ExpressionAttributeNames - not used in this example
-//                expressionAttributeValues);
-
+        ItemCollection<ScanOutcome> items = table.scan();
         System.out.println("Scan of " + tableName );
 
         for (Item item : items) {
             System.out.println(item.toJSONPretty());
         }
+    }
+
+    public static AmazonDynamoDB amazonDynamoDB() {
+        return  AmazonDynamoDBClientBuilder.standard()
+                .withEndpointConfiguration(
+                        new AwsClientBuilder.EndpointConfiguration("http://localhost:4566","us-west-"))
+                .withCredentials(new DefaultAWSCredentialsProviderChain())
+                .build();
+    }
+
+
+
+    private static void scanProductsTable() {
+
+//        Table table = dynamoDB.getTable(tableName);
+//
+//
+
 
     }
 
@@ -88,11 +99,7 @@ public class ProductAvroProducer {
 
     public static void populateProductsKafkaTopic(){
 
-        DefaultKafkaProducerFactory<String, AvroProduct> pf1 = getKafkaProducerFactory();
-        KafkaTemplate<String, AvroProduct> template1 = new KafkaTemplate<>(pf1, true);
-        template1.setDefaultTopic("Products-Kafka-Topic");
 
-        scanProductsTable();
 
 //        AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().build();
 //
