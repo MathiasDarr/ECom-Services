@@ -5,6 +5,10 @@
 
 data/
 
+#Docker volume
+ls_tmp/
+
+
 
 # Node artifact files
 node_modules/
