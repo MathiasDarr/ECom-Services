@@ -31,6 +31,7 @@
 * Compile 
     * mvn clean packge
 * Populate the products kafka topic
-    * Run the main class in the ProductAvroProducer class in the producers module.  This class scans the DynamoDB products table and writes to Kafka
+    * java -jar producers/target/producers-1.0-SNAPSHOT.jar
+     
      
      
