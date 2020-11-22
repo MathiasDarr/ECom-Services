@@ -26,27 +26,18 @@ import java.util.*;
 
 public class ProductAvroProducer {
 
-//    static AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().build();
-//    static DynamoDB dynamoDB = new DynamoDB(client);
+    static AmazonDynamoDB client = amazonDynamoDB();
+    static DynamoDB dynamoDB = new DynamoDB(client);
     static String tableName = "Products";
 
     public static void main(String[] args) {
-        DefaultKafkaProducerFactory<String, AvroProduct> pf1 = getKafkaProducerFactory();
-        KafkaTemplate<String, AvroProduct> template1 = new KafkaTemplate<>(pf1, true);
-        template1.setDefaultTopic("Products-Kafka-Topic");
-
-        AmazonDynamoDB amazonDynamoDB = amazonDynamoDB();
-        DynamoDB dynamoDB = new DynamoDB(amazonDynamoDB);
-        Table table = dynamoDB.getTable(tableName);
-        ItemCollection<ScanOutcome> items = table.scan();
-        System.out.println("Scan of " + tableName );
-
-        for (Item item : items) {
-            System.out.println(item.toJSONPretty());
-        }
+        scanProductsTable();
     }
 
     public static AmazonDynamoDB amazonDynamoDB() {
+        /*
+        This method returns an instance of the class AmazonDynamoDB with a configuration pointing to the local dynamoDB endpoint
+         */
         return  AmazonDynamoDBClientBuilder.standard()
                 .withEndpointConfiguration(
                         new AwsClientBuilder.EndpointConfiguration("http://localhost:4566","us-west-"))
@@ -55,12 +46,26 @@ public class ProductAvroProducer {
     }
 
 
-
     private static void scanProductsTable() {
+        /*
+        This method scans the dynamodb products table.
+         */
 
-//        Table table = dynamoDB.getTable(tableName);
-//
-//
+        DefaultKafkaProducerFactory<String, AvroProduct> pf1 = getKafkaProducerFactory();
+        KafkaTemplate<String, AvroProduct> template1 = new KafkaTemplate<>(pf1, true);
+        template1.setDefaultTopic("Products-Kafka-Topic");
+
+        Table table = dynamoDB.getTable(tableName);
+        ItemCollection<ScanOutcome> items = table.scan();
+        System.out.println("Scan of " + tableName );
+
+
+
+
+        for (Item item : items) {
+            AvroProduct product = new AvroProduct(item.getString("vendor"),item.getString("productName"), item.getDouble("price"),0L);
+            template1.sendDefault(null, product);
+        }
 
 
     }
@@ -90,28 +95,7 @@ public class ProductAvroProducer {
         return pf1;
     }
 
-    public static DynamoDB getDynamoDB(){
-        AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard()
-                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration("http://localhost:4566", "us-west-2"))
-                .build();
-        return new DynamoDB(client);
-    }
-
     public static void populateProductsKafkaTopic(){
-
-
-
-//        AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().build();
-//
-//        ScanRequest scanRequest = new ScanRequest()
-//                .withTableName("Reply");
-//
-//        ScanResult result = client.scan(scanRequest);
-//        for (Map<String, AttributeValue> item : result.getItems()){
-//            printItem(item);
-//        }
-
-
 
     }
 }

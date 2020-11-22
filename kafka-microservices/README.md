@@ -1,6 +1,17 @@
 ### ECommerce MicroServices ###
 
+##### This directory contains a Spring Boot microservices project. #####
+## The microservices are implemented using the following technologies ##
+* Spring Boot
+* Kafka, spring cloud Kafka binder, avro serialization
+* DynamoDB & Java AWS SDK
+* Ehcache
+* Jmeter for performance testing 
+
 ### Microservices ###
+
+* producers 
+   - This module contains classes with main methods that populate the Kafka-topics.
 * orders-service
     - expose endpoints for placing orders
 * inventory-service
@@ -8,9 +19,18 @@
 * DynamoDB backend
 
 
+### Project Dependencies ###
+* a local dynamoDB environment or AWS account
+* Java 11 & maven (if compiling & running natively instead of through Docker)
+* docker-compose
 
-### Switch to Java 11 if currently set to java 8 ###
-
-update-java-alternatives --list
-
-sudo update-java-alternatives --set /usr/lib/jvm/java-1.11.0-openjdk-amd64
+### How to run the project ###
+* Ensure that the DynamoDB products table has been populated.  This can be done following the instructions in the data_model/products directory. 
+* Launch zookeeper, kafka broker & schema registry in docker
+    * docker-compose -f kafka-compose.yaml up 
+* Compile 
+    * mvn clean packge
+* Populate the products kafka topic
+    * Run the main class in the ProductAvroProducer class in the producers module.  This class scans the DynamoDB products table and writes to Kafka
+     
+     
