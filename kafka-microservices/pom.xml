@@ -24,7 +24,6 @@
 		<module>inventory-service</module>
 		<module>service-utilities</module>
 		<module>producers</module>
-		<module>producers</module>
 	</modules>
 
 	<repositories>
