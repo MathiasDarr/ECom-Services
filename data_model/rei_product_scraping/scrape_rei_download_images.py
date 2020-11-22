@@ -1,13 +1,15 @@
-"""
-This script scrapes REI.com for products & writes csv files for each category i.e mens-boots
-"""
-# !/usr/bin/env python3
-
 import requests
 from bs4 import BeautifulSoup
 import re
 import csv
+from selenium import webdriver
+import boto3
 import os
+
+
+driver = webdriver.Chrome('/home/mddarr/data/libraries/selenium/chromedriver')
+s3_client = boto3.client('s3')
+BUCKET = 'dakobed-outdoor-recreation'
 
 
 def get_product_detail(url, category):
@@ -17,6 +19,7 @@ def get_product_detail(url, category):
     :param category: cateogry of product
     :return: product dictionary with product name, vendor, colors, price & category
     """
+
     page = requests.get(url)
     soup = BeautifulSoup(page.text, 'html.parser')
 
@@ -32,9 +35,23 @@ def get_product_detail(url, category):
     parsed_name = parsed_name.replace(vendor, '').lstrip()
     if len(colors) == 0:
         colors = None
-    product = {'name': str(parsed_name), 'vendor': str(vendor), 'colors': colors, 'price': price, 'url': url,
-               'category': category}
 
+    driver.get(url)
+
+    img = driver.find_element_by_class_name('media-center-primary-image')
+    # src = img.get_attribute('src')
+    if not os.path.exists('products/{}'.format(category)):
+        os.makedirs('products/{}'.format(category))
+
+    image_file_name = 'products/{}/{}-{}'.format(category,vendor, parsed_name)
+    with open(image_file_name, 'wb') as file:
+        file.write(img.screenshot_as_png)
+
+    with open(image_file_name, "rb") as f:
+        s3_client.upload_fileobj(f, BUCKET, image_file_name)
+
+    product = {'name': str(parsed_name), 'vendor': str(vendor), 'colors': colors, 'price': price, 'url': url,
+               'category': category, 'image_url': image_file_name}
     return product
 
 

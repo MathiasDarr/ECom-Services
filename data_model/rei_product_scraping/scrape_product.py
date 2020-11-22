@@ -2,6 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 import json
 import re
+from selenium import webdriver
+
 
 def get_product_detail(url):
     page = requests.get(url)
