@@ -66,8 +66,7 @@ Modify line in csv
 
 def modify_image_url():
     """
-    
-    :return:
+    This function writes a new csv file for the one that was incorrectly saved.
     """
     bucket_url = "https://dakobed-outdoor-recreation.s3-us-west-2.amazonaws.com/"  # {}"
 
