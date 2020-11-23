@@ -2,7 +2,7 @@
 
 if [[ -z $2 ]]
 then
-  stackname=kinesis-lambda-stack
+  stackname=products-api-stack-2
 else
   stackname=$2
 fi
@@ -35,5 +35,3 @@ then
 else
     echo "choose either local or aws"
 fi
-
-

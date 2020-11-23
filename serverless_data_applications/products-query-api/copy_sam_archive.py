@@ -33,5 +33,5 @@ with open(local_archive_file, "rb") as f:
     s3_local_client.upload_fileobj(f, BUCKET, archive_file)
 
 # Delete the file from temp
-for f in os.listdir('../products-query-api/tmp'):
-    os.remove(os.path.join('../products-query-api/tmp', f))
+for f in os.listdir('tmp'):
+    os.remove(os.path.join('tmp', f))
