@@ -1,6 +1,21 @@
 import json
+import os
+import boto3
+
 
 # import requests
+
+dynamodb = boto3.resource('dynamodb') if os.getenv('deployment') != 'localstack' else \
+    boto3.resource('dynamodb', endpoint_url= 'http://{}:4566'.format('localhost'))
+
+# dynamodb = boto3.resource('dynamodb') if os.getenv('deployment') != 'localstack' else \
+#     boto3.resource('dynamodb', endpoint_url= 'http://localhost:4566') .format(os.getenv('LOCALSTACK_HOSTNAME')))
+
+
+def scan_products_table():
+    table = dynamodb.Table('Products')
+    scan_results = table.scan()
+    return scan_results['Items']
 
 
 def lambda_handler(event, context):
@@ -33,10 +48,9 @@ def lambda_handler(event, context):
 
     #     raise e
 
+    items = scan_products_table()
+
     return {
         "statusCode": 200,
-        "body": json.dumps({
-            "message": "hello world",
-            # "location": ip.text.replace("\n", "")
-        }),
+        "body": items
     }

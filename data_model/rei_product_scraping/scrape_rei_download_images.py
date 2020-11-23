@@ -133,10 +133,8 @@ def get_products(category):
         pagenumber += 1
     return ['https://www.rei.com' + str(product) for product in products if str(product).find('rei-garage') < 0]
 
-done = ['mens-casual-jackets']
-categories = ['mens-boots', 'mens-insulated-jackets', 'mens-fleece-and-soft-shell-jackets',
-              'mens-rain-jackets', 'mens-running-jackets', 'mens-snow-jackets', 'mens-winter-boots',
-              'backpacking-packs', 'day-packs', 'womens-boots', 'womens-casual-jackets', 'womens-insulated-jackets',
+done = ['mens-casual-jackets', 'mens-boots','mens-insulated-jackets', 'mens-rain-jackets', 'mens-running-jackets', 'mens-snow-jackets', 'mens-winter-boots']
+categories = ['mens-casual-jackets', 'mens-boots','mens-insulated-jackets', 'mens-rain-jackets', 'mens-running-jackets', 'mens-snow-jackets', 'mens-winter-boots','mens-fleece-and-soft-shell-jackets', 'backpacking-packs', 'day-packs', 'womens-boots', 'womens-casual-jackets', 'womens-insulated-jackets',
               'womens-fleece-and-soft-shell-jackets', 'womens-rain-jackets', 'womens-running-jackets']
 # This category wasn't working
 windshells = 'mens-wind-shells'
@@ -153,7 +151,7 @@ for category in categories:
             parsed_products.append(get_product_detail(product_url, category))
         except Exception as e:
             print(e)
-        sleep(randint(20,65))
+        sleep(randint(3,12))
     keys = ['name', 'vendor', 'colors', 'price', 'url', 'category', 'image_url']
 
     with open('products/{}.csv'.format(category), 'w') as output_file:

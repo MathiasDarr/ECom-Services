@@ -22,6 +22,11 @@ Resources:
     Properties:
       FunctionName: ProductsQueryFunction
       CodeUri: products_query_api_lambda/
+      Environment:
+        Variables:
+          deployment: localstack
+
+
       Handler: app.lambda_handler
       Runtime: python3.7
       Events:
