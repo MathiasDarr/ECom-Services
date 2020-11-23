@@ -9,6 +9,11 @@ Globals:
   Function:
     Timeout: 3
 Resources:
+  ProductsApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      Name: ProductsAPI
   ProductsQueryFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -20,20 +25,22 @@ Resources:
         HelloWorld:
           Type: Api
           Properties:
+            RestApiId:
+              Ref: ProductsApi
             Path: /hello
             Method: get
 Outputs:
-  HelloWorldApi:
+  ProductsApi:
     Description: API Gateway endpoint URL for Prod stage for Hello World function
     Value:
-      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/
-  HelloWorldFunction:
+      Fn::Sub: https://${ProductsApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/
+  ProductsQueryFunction:
     Description: Hello World Lambda Function ARN
     Value:
       Fn::GetAtt:
       - ProductsQueryFunction
       - Arn
-  HelloWorldFunctionIamRole:
+  ProductsQueryFunctionIamRole:
     Description: Implicit IAM Role created for Hello World function
     Value:
       Fn::GetAtt:

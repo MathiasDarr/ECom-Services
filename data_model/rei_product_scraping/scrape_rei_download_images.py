@@ -161,6 +161,4 @@ for category in categories:
         dict_writer.writeheader()
         dict_writer.writerows(parsed_products)
 
-for file in os.listdir('products/mens-casual-jackets'):
-    file_path = 'products/mens-casual-jackets/{}'.format(file)
-    os.rename(file_path, file_path+'.png')
+

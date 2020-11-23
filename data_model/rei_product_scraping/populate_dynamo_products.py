@@ -23,7 +23,7 @@ def insert_product(product):
     )
 
 
-dynamodb = boto3.resource('dynamodb', endpoint_url="http://localhost:4566")
+dynamodb = boto3.resource('dynamodb') #, endpoint_url="http://localhost:4566")
 table = dynamodb.Table('Products')
 
 CSV_DIRECTORY = 'products'
@@ -32,7 +32,6 @@ for file in os.listdir(CSV_DIRECTORY):
     file_path = 'products/{}'.format(file)
     if file_path.split('.')[-1] =='csv':
         csv_files.append(file_path)
-        print(file_path)
 
 for file in csv_files:
     with open(file, newline='') as csvfile:
