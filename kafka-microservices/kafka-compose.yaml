@@ -1,10 +1,10 @@
 version: '2'
 services:
-#  dynamodb:
-#    image: amazon/dynamodb-local:latest
-#    ports:
-#      - "8000:8000"
-#    command: ["-jar", "DynamoDBLocal.jar", "-sharedDb", "-inMemory"]
+  dynamodb:
+    image: amazon/dynamodb-local:latest
+    ports:
+      - "8000:8000"
+    command: ["-jar", "DynamoDBLocal.jar", "-sharedDb", "-inMemory"]
   zookeeper:
     image: debezium/zookeeper:${DEBEZIUM_VERSION}
     ports:

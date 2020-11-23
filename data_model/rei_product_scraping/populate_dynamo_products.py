@@ -23,7 +23,8 @@ def insert_product(product):
     )
 
 
-dynamodb = boto3.resource('dynamodb',endpoint_url="http://localhost:4566")
+# dynamodb = boto3.resource('dynamodb',endpoint_url="http://localhost:4566")
+dynamodb = boto3.resource('dynamodb',endpoint_url="http://localhost:8000")
 table = dynamodb.Table('Products')
 
 CSV_DIRECTORY = 'products'

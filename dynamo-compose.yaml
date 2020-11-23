@@ -1,0 +1,14 @@
+version: '2'
+services:
+  dynamodb:
+    container_name: dynamo-local
+
+    image: amazon/dynamodb-local:latest
+    ports:
+      - "8000:8000"
+    command: ["-jar", "DynamoDBLocal.jar", "-sharedDb", "-inMemory"]
+    networks:
+      - dynamonetwork
+networks:
+  dynamonetwork:
+    driver: bridge

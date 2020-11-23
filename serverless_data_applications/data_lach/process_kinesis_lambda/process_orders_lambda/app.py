@@ -8,6 +8,9 @@ s3 = boto3.resource('s3') if os.getenv('deployment') != 'localstack' else \
     boto3.resource('s3', endpoint_url= 'http://{}:4566'.format(os.getenv('LOCALSTACK_HOSTNAME')))
 
 
+print("THE LOCALSTACK HOSTNAME IS")
+print(os.getenv('LOCALSTACK_HOSTNAME'))
+
 def write_data_to_s3(data):
     try:
         s3object = s3.Object('dakobed-lach-orders', 'first_data.json')

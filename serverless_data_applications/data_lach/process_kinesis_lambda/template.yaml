@@ -5,7 +5,7 @@ Resources:
   LambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: process_orders_lambda_dynamo/
+      CodeUri: process_orders_lambda/
       Handler: app.lambda_handler
       Runtime: python3.7
       Timeout: 10
