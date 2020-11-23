@@ -1,3 +1,11 @@
+"""
+This script scrapes REI.com for products & writes csv files for each category i.e mens-boots.  In order to not be
+blocked, I include random sleeps which are pretty long so this may take a long time to run.  If you don't want to
+wait just comment outthe sleep
+
+"""
+# !/usr/bin/env python3
+
 import requests
 from bs4 import BeautifulSoup
 import re
@@ -5,6 +13,9 @@ import csv
 from selenium import webdriver
 import boto3
 import os
+import time
+from time import sleep
+from random import randint
 
 
 driver = webdriver.Chrome('/home/mddarr/data/libraries/selenium/chromedriver')
@@ -43,15 +54,15 @@ def get_product_detail(url, category):
     if not os.path.exists('products/{}'.format(category)):
         os.makedirs('products/{}'.format(category))
 
-    image_file_name = 'products/{}/{}-{}'.format(category,vendor, parsed_name)
+    image_file_name = 'products/{}/{}-{}.png'.format(category,vendor, parsed_name)
     with open(image_file_name, 'wb') as file:
         file.write(img.screenshot_as_png)
 
     with open(image_file_name, "rb") as f:
         s3_client.upload_fileobj(f, BUCKET, image_file_name)
-
+    image_url = 'https://dakobed-outdoor-recreation.s3-us-west-2.amazonaws.com/{}'.format(image_file_name)
     product = {'name': str(parsed_name), 'vendor': str(vendor), 'colors': colors, 'price': price, 'url': url,
-               'category': category, 'image_url': image_file_name}
+               'category': category, 'image_url': image_url}
     return product
 
 
@@ -122,8 +133,8 @@ def get_products(category):
         pagenumber += 1
     return ['https://www.rei.com' + str(product) for product in products if str(product).find('rei-garage') < 0]
 
-
-categories = ['mens-casual-jackets', 'mens-boots', 'mens-insulated-jackets', 'mens-fleece-and-soft-shell-jackets',
+done = ['mens-casual-jackets']
+categories = ['mens-boots', 'mens-insulated-jackets', 'mens-fleece-and-soft-shell-jackets',
               'mens-rain-jackets', 'mens-running-jackets', 'mens-snow-jackets', 'mens-winter-boots',
               'backpacking-packs', 'day-packs', 'womens-boots', 'womens-casual-jackets', 'womens-insulated-jackets',
               'womens-fleece-and-soft-shell-jackets', 'womens-rain-jackets', 'womens-running-jackets']
@@ -142,8 +153,14 @@ for category in categories:
             parsed_products.append(get_product_detail(product_url, category))
         except Exception as e:
             print(e)
-    keys = ['name', 'vendor', 'colors', 'price', 'url', 'category']
-    with open('data_model/rei_product_scraping/data/{}.csv'.format(category), 'w', newline='') as output_file:
+        sleep(randint(20,65))
+    keys = ['name', 'vendor', 'colors', 'price', 'url', 'category', 'image_url']
+
+    with open('products/{}.csv'.format(category), 'w') as output_file:
         dict_writer = csv.DictWriter(output_file, keys)
         dict_writer.writeheader()
         dict_writer.writerows(parsed_products)
+
+for file in os.listdir('products/mens-casual-jackets'):
+    file_path = 'products/mens-casual-jackets/{}'.format(file)
+    os.rename(file_path, file_path+'.png')

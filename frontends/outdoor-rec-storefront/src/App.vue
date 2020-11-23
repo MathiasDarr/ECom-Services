@@ -45,16 +45,13 @@ export default {
   },
   created(){
 
-  
-    
   },
   data(){
     return {
         drawer: false,
         menuItems:[
-          {title:'Landing', route:'/' }, 
+          {title:'Store', route:'/' }, 
           {title:'Login', route:'/login/' }, 
-          {title:'Upload', route:'/upload/' },
 
           // {title: 'Kafka Microservices', route:'/eventservices' },
           // {title: 'Style Transfer', route:'/style' }

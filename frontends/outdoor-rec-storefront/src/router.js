@@ -4,20 +4,8 @@ import Router from 'vue-router'
 import Login from './components/Login'
 import Register from './components/Register'
 import Confirm from './components/Confirm'
-// import Landing from './components/Landing'
 
-
-
-
-// import MaestroTranscriptions from './components/music/piano/MaestroTranscriptions'
-// import TranscriptionDetail from './components/music/guitar/TranscriptionDetail'
-
-// import TranscriptionList from './components/music/TranscriptionList'
-
-// import Transcriber from './components/music/Transcriber'
-// import MusicProjectIntro from './components/music/MusicProjectIntro'
-// import GuitarSet from './components/music/guitar/GuitarSet'
-// import Transcription from './components/music/Transcription'
+import Store from './components/ecommerce/Store'
 
 
 Vue.use(Router)
@@ -29,7 +17,7 @@ export default new Router({
 
     {
       path: '/',
-      component: Login
+      component: Store
     },
     {
       path:'/login',

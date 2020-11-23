@@ -126,7 +126,10 @@ for category in categories:
         except Exception as e:
             print(e)
     keys = ['name', 'vendor', 'colors', 'price', 'url', 'category']
-    with open('data_model/rei_product_scraping/data/{}.csv'.format(category), 'w', newline='') as output_file:
+    with open('data_model/rei_product_scraping/data/{}.csv'.format(category), 'ab', newline='') as output_file:
         dict_writer = csv.DictWriter(output_file, keys)
         dict_writer.writeheader()
         dict_writer.writerows(parsed_products)
+
+
+
