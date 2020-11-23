@@ -18,6 +18,10 @@ try:
                 "AttributeName": "productName",
                 "AttributeType": "S"
             },
+            {
+                "AttributeName": "category",
+                "AttributeType": "S"
+            },
         ],
         TableName="Products",
         KeySchema=[
@@ -33,7 +37,28 @@ try:
         ProvisionedThroughput={
             "ReadCapacityUnits": 1,
             "WriteCapacityUnits": 1
-        })
+        },
+        GlobalSecondaryIndexes=[
+            {
+                'IndexName': 'categoryGSI',
+                'KeySchema': [
+                    {
+                        'AttributeName': 'category',
+                        'KeyType': 'HASH',
+                    },
+                ],
+                'Projection': {
+                    'ProjectionType': 'KEYS_ONLY',
+                },
+                'ProvisionedThroughput': {
+                    'ReadCapacityUnits': 1,
+                    'WriteCapacityUnits': 1,
+                }
+            },
+        ],
+
+    )
+
 except Exception as e:
     print(e)
 

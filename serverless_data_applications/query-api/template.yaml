@@ -15,9 +15,12 @@ Resources:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       FunctionName: ProductsQueryFunction
-      CodeUri: products_query_lambda/
+      CodeUri: scan_products/
       Handler: app.lambda_handler
       Runtime: python3.7
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: Products
       Events:
         ProductsQuery:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
@@ -37,4 +40,4 @@ Outputs:
     Value: !GetAtt ProductsQueryFunction.Arn
   HelloWorldFunctionIamRole:
     Description: "Implicit IAM Role created for Hello World function"
-    Value: !GetAtt HelloWorldFunctionRole.Arn
+    Value: !GetAtt ProductsQueryFunction.Arn

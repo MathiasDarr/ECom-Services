@@ -16,9 +16,9 @@ LOCALSTACK_HOSTNAME = '172.17.0.2'
 
 def scan_products_table():
     dynamodb.list_tables()
-    # table = dynamodb.Table('Products')
-    # scan_results = table.scan()
-    # return scan_results['Items']
+    table = dynamodb.Table('Products')
+    scan_results = table.scan()
+    return scan_results['Items']
 
 
 def lambda_handler(event, context):

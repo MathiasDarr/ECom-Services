@@ -2,9 +2,17 @@ import json
 import boto3
 # import requests
 
+dynamodb = boto3.client('dynamodb', endpoint_url='http://dynamo-local:8000')
+dynamo_resource = boto3.resource('dynamodb', endpoint_url='http://dynamo-local:8000')
+
+def scan_products():
+    table = dynamo_resource.Table('Products')
+    scan_results = table.scan()
+    return scan_results['Items']
+
 
 def lambda_handler(event, context):
-    """Sample pure Lambda function
+    """
 
     Parameters
     ----------
@@ -24,21 +32,14 @@ def lambda_handler(event, context):
 
         Return doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
     """
+    products = scan_products()
+    for product in products:
+        product['price'] = float(product['price'])
 
-    # try:
-    #     ip = requests.get("http://checkip.amazonaws.com/")
-    # except requests.RequestException as e:
-    #     # Send some context about this error to Lambda Logs
-    #     print(e)
-
-    #     raise e
-
-    dynamodb = boto3.client('dynamodb', endpoint_url='http://dynamo-local:8000')
-    dynamodb.list_tables()
     return {
         "statusCode": 200,
         "body": json.dumps({
-            "message": str(dynamodb.list_tables()),
+            "message": products
             # "location": ip.text.replace("\n", "")
         }),
     }

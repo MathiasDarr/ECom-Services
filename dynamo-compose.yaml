@@ -1,4 +1,4 @@
-version: '2'
+version: '3.5'
 services:
   dynamodb:
     container_name: dynamo-local
@@ -8,7 +8,8 @@ services:
       - "8000:8000"
     command: ["-jar", "DynamoDBLocal.jar", "-sharedDb", "-inMemory"]
     networks:
-      - dynamonetwork
+      - local-api-network
 networks:
-  dynamonetwork:
+  local-api-network:
+    name: local-api-network
     driver: bridge

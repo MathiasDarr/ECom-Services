@@ -20,7 +20,7 @@ Resources:
           KeyType: RANGE
 
       GlobalSecondaryIndexes:
-        - IndexName: "GSI"
+        - IndexName: "categoryGSI"
           KeySchema:
             - AttributeName: category
               KeyType: HASH
