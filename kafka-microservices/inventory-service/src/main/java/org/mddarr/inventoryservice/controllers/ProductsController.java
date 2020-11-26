@@ -1,6 +1,7 @@
 package org.mddarr.inventoryservice.controllers;
 
 
+import org.mddarr.inventoryservice.dto.Category;
 import org.mddarr.inventoryservice.dto.Product;
 import org.mddarr.inventoryservice.services.ProductService;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("products")
 @CrossOrigin
 public class ProductsController {
 
@@ -19,21 +19,34 @@ public class ProductsController {
         this.productService = productService;
     }
 
-    @GetMapping
+
+    @GetMapping("categories")
+    public List<Category> allCategories() {
+        return productService.fetchCategories();
+    }
+
+
+    @GetMapping("products")
     public List<Product> allProducts() {
         return productService.fetchAllProducts();
     }
 
-    @GetMapping("/{brandID}")
+
+
+
+    @GetMapping("products/{brandID}")
     public List<Product> allProducts(@PathVariable String brandID) {
         return productService.fetchAllProductsByBrand(brandID);
     }
 
-    @GetMapping("/{brand}/{productName}")
+    @GetMapping("products/{brand}/{productName}")
     public ResponseEntity<Product> getProduct(@PathVariable String brand, @PathVariable String productName,
                                               @RequestParam(name="isCacheable") boolean isCacheable ){
         return ResponseEntity.of(productService.getProduct(brand, productName, isCacheable));
     }
+
+
+
 
 //    @GetMapping
 //    public List<Product> allBrandsProducts(){

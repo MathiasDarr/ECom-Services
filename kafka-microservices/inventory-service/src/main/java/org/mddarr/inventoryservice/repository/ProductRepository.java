@@ -3,22 +3,23 @@ package org.mddarr.inventoryservice.repository;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
+import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ListTablesResult;
+import com.amazonaws.services.dynamodbv2.model.ScanRequest;
+import com.amazonaws.services.dynamodbv2.model.ScanResult;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.mddarr.inventoryservice.dto.Category;
 import org.mddarr.inventoryservice.utils.ProductsTableUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
-
+import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 public class ProductRepository {
@@ -28,10 +29,14 @@ public class ProductRepository {
 
     private final AmazonDynamoDB amazonDynamoDB;
     private final DynamoDBMapper mapper;
+    private final DynamoDB dynamoDB;
+
 
     public ProductRepository(AmazonDynamoDB db){
         this.amazonDynamoDB = db;
         this.mapper = new DynamoDBMapper(amazonDynamoDB);
+        this.dynamoDB = new DynamoDB(this.amazonDynamoDB);
+
     }
 
     public Optional<ProductEntity> get(String brand, String productName){
@@ -60,6 +65,29 @@ public class ProductRepository {
         List<ProductEntity> products =  mapper.query(ProductEntity.class, queryExp);
         return products;
     }
+
+//    public List<ProductEntity> fetchAllProductsByCategory(String category){
+//
+//
+//
+//    }
+//
+
+    public List<Category> fetchAllCategories(){
+        ScanRequest scanRequest = new ScanRequest()
+                .withTableName("Categories");
+
+        List<Category> categories = new ArrayList<>();
+        ScanResult result = amazonDynamoDB.scan(scanRequest);
+        for (Map<String, AttributeValue> item : result.getItems()) {
+            AttributeValue category = item.get("category");
+            AttributeValue subcategory = item.get("subcategory");
+            AttributeValue gender = item.get("gender");
+            categories.add(new Category(category.toString(), subcategory.toString(), gender.toString()));
+        }
+        return categories;
+    }
+
 
     @PostConstruct
     public void init() throws IOException {

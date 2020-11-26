@@ -4,7 +4,7 @@ server:
 aws:
   region: us-west-2
   dynamo:
-    endpoint:  http://localhost:4566/
+    endpoint:  http://localhost:8000/
 
 spring:
   cloud:

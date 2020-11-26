@@ -79,16 +79,15 @@ def create_products_table():
 
 
 # dynamodb = boto3.resource('dynamodb',endpoint_url="http://localhost:4566")
-dynamodb = boto3.resource('dynamodb',endpoint_url="http://localhost:8000")
-create_products_table()
+dynamodb = boto3.resource('dynamodb')  # ,endpoint_url="http://localhost:8000")
+# create_products_table()
 table = dynamodb.Table('Products')
-
 
 CSV_DIRECTORY = 'products'
 csv_files = []
 for file in os.listdir(CSV_DIRECTORY):
     file_path = 'products/{}'.format(file)
-    if file_path.split('.')[-1] =='csv':
+    if file_path.split('.')[-1] == 'csv':
         csv_files.append(file_path)
 
 for file in csv_files:
